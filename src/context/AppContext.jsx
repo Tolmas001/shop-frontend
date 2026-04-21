@@ -394,6 +394,10 @@ export const AppProvider = ({ children }) => {
     return await auth.forgotPassword(email);
   };
 
+  const verifyResetCode = async (email, code) => {
+    return await auth.verifyResetCode(email, code);
+  };
+
   const resetPassword = async (email, code, newPassword) => {
     return await auth.resetPassword(email, code, newPassword);
   };
@@ -469,7 +473,7 @@ export const AppProvider = ({ children }) => {
 
   return (
     <AppContext.Provider value={{
-      user, setUser, login, register, googleLogin, logout, updateProfile, forgotPassword, resetPassword,
+      user, setUser, login, register, googleLogin, logout, updateProfile, forgotPassword, verifyResetCode, resetPassword,
       cart, addToCart, removeFromCart, updateQuantity, clearCart, cartTotal, cartCount, loading,
       favorites, toggleFavorite, clearFavorites,
       language, changeLanguage, t, theme, toggleTheme,

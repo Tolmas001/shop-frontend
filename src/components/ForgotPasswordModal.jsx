@@ -4,7 +4,7 @@ import { X, Mail, KeyRound, Lock, ArrowRight, CheckCircle2, Eye, EyeOff } from '
 import { useApp } from '../context/AppContext';
 
 const ForgotPasswordModal = ({ isOpen, onClose }) => {
-  const { t, forgotPassword, resetPassword, showNotification } = useApp();
+  const { t, forgotPassword, verifyResetCode, resetPassword, showNotification } = useApp();
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
@@ -30,7 +30,16 @@ const ForgotPasswordModal = ({ isOpen, onClose }) => {
 
   const handleVerifyCode = async (e) => {
     e.preventDefault();
-    setStep(3);
+    setLoading(true);
+    setError('');
+    try {
+      await verifyResetCode(email, code);
+      setStep(3);
+    } catch (err) {
+      setError(err.response?.data?.error || t('error_occurred'));
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleResetPassword = async (e) => {

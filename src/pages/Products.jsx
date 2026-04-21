@@ -100,13 +100,20 @@ const Products = () => {
 
   return (
     <div className="container" style={{ padding: '40px 0' }}>
+      {/* Filter Overlay (Fixed position, stays outside grid) */}
+      <div 
+        className={`filter-overlay ${showMobileFilters ? 'open' : ''}`}
+        onClick={() => setShowMobileFilters(false)}
+      />
+
       {/* Mobile Filter Toggle */}
-      <div className="mobile-filter-bar" style={{ display: 'none', marginBottom: '24px', position: 'sticky', top: 'var(--nav-height)', zIndex: 100, background: 'var(--background)', padding: '12px 0' }}>
+      <div className="filter-toggle-btn show-tablet">
         <button 
           onClick={() => setShowMobileFilters(true)}
+          className="btn btn-primary"
           style={{ 
-            display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', 
-            background: 'white', border: '1.5px solid #eee', borderRadius: '12px', fontWeight: 600, width: '100%', justifyContent: 'center'
+            display: 'flex', alignItems: 'center', gap: '8px', padding: '14px 28px', 
+            borderRadius: '20px', fontWeight: 700, fontSize: '15px'
           }}
         >
           <Filter size={18} /> {t('filters_and_search')}
@@ -115,10 +122,12 @@ const Products = () => {
 
       <div className="products-layout">
         {/* Sidebar Filters */}
-        <aside className={`filter-sidebar ${showMobileFilters ? 'open' : ''}`}>
-          <div className="sidebar-header" style={{ display: 'none', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-            <h3 style={{ margin: 0 }}>{t('filter_title')}</h3>
-            <button onClick={() => setShowMobileFilters(false)}><X size={24} /></button>
+        <aside className={`filter-sidebar filter-sidebar-mobile ${showMobileFilters ? 'open' : ''}`}>
+          <div className="sidebar-header show-tablet" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+            <h3 style={{ margin: 0, fontWeight: 800 }}>{t('filter_title')}</h3>
+            <button onClick={() => setShowMobileFilters(false)} style={{ padding: '8px', background: '#f3f4f6', borderRadius: '50%', color: 'var(--text-muted)' }}>
+              <X size={20} />
+            </button>
           </div>
 
           <div style={{ marginBottom: '32px' }}>

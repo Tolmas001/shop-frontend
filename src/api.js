@@ -38,6 +38,7 @@ export const auth = {
   updateProfile: (data) => api.put('/auth/profile', data),
   googleLogin: (credential) => api.post('/auth/google-login', { credential }),
   forgotPassword: (email) => api.post('/auth/forgot-password', { email }),
+  verifyResetCode: (email, code) => api.post('/auth/verify-reset-code', { email, code }),
   resetPassword: (email, code, newPassword) => api.post('/auth/reset-password', { email, code, newPassword }),
   getMyReviews: () => api.get('/auth/my-reviews'),
 };
@@ -98,6 +99,11 @@ export const notifications = {
   markAsRead: (id) => api.patch(`/notifications/${id}/read`),
   markAllRead: () => api.patch('/notifications/read-all'),
   broadcast: (data) => api.post('/notifications/broadcast', data),
+};
+
+export const superAdmin = {
+  updateUserRole: (id, role) => api.patch(`/super-admin/users/${id}/role`, { role }),
+  getLogs: () => api.get('/super-admin/logs'),
 };
 
 export default api;

@@ -47,7 +47,7 @@ const ProductDetail = () => {
         // Fetch related products
         api.getAll({ category: res.data.category })
           .then(related => {
-            setRelatedProducts(related.data.filter(p => p.id !== parseInt(id)).slice(0, 4));
+            setRelatedProducts(related.data.filter(p => !id || p.id !== parseInt(id)).slice(0, 4));
           });
       })
       .catch(err => console.error(err))
@@ -138,19 +138,16 @@ const ProductDetail = () => {
           </motion.div>
           
           <div className="thumb-gallery">
-             {[1,2,3,4].map(i => (
-               <div 
-                 key={i}
-                 onClick={() => setActiveImage(product.image)}
-                 className={`thumb-item ${activeImage === product.image ? 'active' : ''}`}
-               >
-                 <img 
-                   src={product.image?.startsWith('/') ? `${backendUrl}${product.image}` : (product.image || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400')} 
-                   alt="thumb" 
-                   onError={handleImageError}
-                 />
-               </div>
-             ))}
+             <div 
+               onClick={() => setActiveImage(product.image)}
+               className={`thumb-item ${activeImage === product.image ? 'active' : ''}`}
+             >
+               <img 
+                 src={product.image?.startsWith('/') ? `${backendUrl}${product.image}` : (product.image || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400')} 
+                 alt="thumb" 
+                 onError={handleImageError}
+               />
+             </div>
           </div>
         </div>
 
@@ -229,7 +226,7 @@ const ProductDetail = () => {
               </div>
             )}
 
-            <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+            <div className="product-actions-mobile" style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', alignItems: 'center' }}>
               <div style={{ 
                 display: 'flex', alignItems: 'center', background: '#F3F4F6', borderRadius: '16px', padding: '4px'
               }}>
@@ -248,14 +245,13 @@ const ProductDetail = () => {
                 </button>
               </div>
 
-                <button 
-                  className="btn btn-outline" 
-                  style={{ width: '56px', height: '56px', padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                  onClick={handleShare}
-                >
-                  <Share2 size={24} />
-                </button>
-              </div>
+              <button 
+                className="btn btn-outline" 
+                style={{ width: '56px', height: '56px', padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                onClick={handleShare}
+              >
+                <Share2 size={24} />
+              </button>
 
               <motion.button 
                 className="btn btn-primary"
@@ -282,6 +278,8 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
+      </div>
+
       <div style={{ marginTop: '100px', borderTop: '1px solid var(--border)', paddingTop: '60px' }}>
         <div style={{ display: 'flex', gap: '40px', marginBottom: '60px', borderBottom: '1px solid var(--border)' }}>
           <button style={{ paddingBottom: '20px', borderBottom: '3px solid var(--primary)', fontWeight: 700, fontSize: '20px' }}>
@@ -468,6 +466,3 @@ const ProductDetail = () => {
 };
 
 export default ProductDetail;
-
-/* --- SHARED STYLES FOR PRODUCT DETAIL --- */
-/* (Styles added to index.css later) */

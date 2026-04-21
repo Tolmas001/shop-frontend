@@ -9,6 +9,8 @@ import AdminCategories from './Categories';
 import AdminOrders from './Orders';
 import AdminUsers from './Users';
 import AdminReviews from './Reviews';
+import AdminManagement from './AdminManagement';
+import ActivityLogs from './ActivityLogs';
 
 import { 
   MessageSquare,
@@ -22,7 +24,12 @@ import {
   ArrowLeft,
   CheckCircle,
   TrendingUp,
-  Heart
+  Heart,
+  ShoppingBag,
+  AlertCircle,
+  Bell,
+  ShieldCheck,
+  History
 } from 'lucide-react';
 
 import { 
@@ -49,7 +56,7 @@ const AdminDashboard = () => {
   const [isSending, setIsSending] = useState(false);
 
   useEffect(() => {
-    if (user?.role === 'admin') {
+    if (user?.role === 'admin' || user?.role === 'superadmin') {
       stats.get()
         .then(res => setStatsData(res.data))
         .catch(() => {});
@@ -81,6 +88,19 @@ const AdminDashboard = () => {
           <Link to="/admin/reviews" className={isActive('/admin/reviews') ? 'sidebar-item active' : 'sidebar-item'}>
             <MessageSquare size={20} /> Sharhlar
           </Link>
+          
+          {user?.role === 'superadmin' && (
+            <>
+              <div style={{ padding: '20px 20px 10px', color: '#4B5563', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase' }}>Super Admin</div>
+              <Link to="/admin/management" className={isActive('/admin/management') ? 'sidebar-item active' : 'sidebar-item'}>
+                <ShieldCheck size={20} /> Adminlar
+              </Link>
+              <Link to="/admin/logs" className={isActive('/admin/logs') ? 'sidebar-item active' : 'sidebar-item'}>
+                <History size={20} /> Audit Loglari
+              </Link>
+            </>
+          )}
+
           <Link to="/" className="sidebar-item" style={{ marginTop: '40px', color: '#9CA3AF' }}>
             <ArrowLeft size={20} /> Saytga qaytish
           </Link>
@@ -354,6 +374,8 @@ const AdminDashboard = () => {
             <Route path="/orders" element={<AdminOrders />} />
             <Route path="/users" element={<AdminUsers />} />
             <Route path="/reviews" element={<AdminReviews />} />
+            <Route path="/management" element={<AdminManagement />} />
+            <Route path="/logs" element={<ActivityLogs />} />
           </Routes>
         </div>
       </div>

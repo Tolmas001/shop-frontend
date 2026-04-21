@@ -214,17 +214,18 @@ const Profile = () => {
         </div>
 
         {/* Grid: Sidebar + Content */}
-        <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: '28px', alignItems: 'start' }}>
+        <div className="profile-grid" style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: '28px', alignItems: 'start' }}>
 
           {/* ─── SIDEBAR ─── */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', position: 'sticky', top: '24px' }}>
+          <div className="profile-sidebar" style={{ display: 'flex', flexDirection: 'column', gap: '16px', position: 'sticky', top: '24px' }}>
 
             {/* Nav */}
-            <div style={{ background: 'var(--bg-card)', borderRadius: '20px', padding: '10px', border: '1px solid var(--border-color)', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }}>
+            <div className="profile-nav-scroll" style={{ background: 'var(--bg-card)', borderRadius: '20px', padding: '10px', border: '1px solid var(--border-color)', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }}>
               {tabs.map(tab => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
+                  className="profile-nav-item"
                   style={{
                     display: 'flex', alignItems: 'center', gap: '12px', width: '100%',
                     padding: '12px 16px', borderRadius: '14px', marginBottom: '3px',
@@ -236,12 +237,13 @@ const Profile = () => {
                 >
                   <tab.icon size={18} />
                   <span style={{ flex: 1, textAlign: 'left' }}>{tab.label}</span>
-                  {activeTab === tab.id && <ChevronRight size={15} />}
+                  {activeTab === tab.id && <ChevronRight size={15} style={{ opacity: 0.5 }} />}
                 </button>
               ))}
-              <div style={{ height: '1px', background: 'var(--border-color)', margin: '8px 0', opacity: 0.5 }} />
+              <div style={{ height: '1px', background: 'var(--border-color)', margin: '8px 0', opacity: 0.5 }} className="hide-mobile" />
               <button
                 onClick={logout}
+                className="profile-nav-item"
                 style={{
                   display: 'flex', alignItems: 'center', gap: '12px', width: '100%',
                   padding: '12px 16px', borderRadius: '14px', background: 'transparent',
@@ -353,7 +355,7 @@ const Profile = () => {
                     </div>
 
                     <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '20px' }}>
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                      <div className="form-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                         <div>
                           <label style={{ display: 'block', fontWeight: 600, fontSize: '13px', marginBottom: '6px' }}>{t('username')}</label>
                           <input style={inputStyle} type="text" value={form.username} onChange={e => setForm({ ...form, username: e.target.value })} required />
@@ -363,7 +365,7 @@ const Profile = () => {
                           <input style={inputStyle} type="text" value={form.full_name} onChange={e => setForm({ ...form, full_name: e.target.value })} />
                         </div>
                       </div>
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                      <div className="form-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                         <div>
                           <label style={{ display: 'block', fontWeight: 600, fontSize: '13px', marginBottom: '6px' }}>{t('email')}</label>
                           <input style={inputStyle} type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} required />
