@@ -97,8 +97,11 @@ const Checkout = () => {
             <div style={{ display: 'grid', gap: '16px' }}>
               {cart.map(item => (
                 <div key={`${item.id}-${item.selectedColor}-${item.selectedSize}`} style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                  <img src={item.image?.startsWith('/') ? `http://localhost:5001${item.image}` : (item.image || 'https://via.placeholder.com/64')} 
-                    alt={item.name} style={{ width: '64px', height: '64px', borderRadius: '12px', objectFit: 'cover', border: '1px solid #f1f1f1' }} />
+                  <img src={item.image?.startsWith('/') ? `${backendUrl}${item.image}` : (item.image || 'https://via.placeholder.com/64')} 
+                       alt={item.name} 
+                       onError={handleImageError}
+                       style={{ width: '64px', height: '64px', borderRadius: '12px', objectFit: 'cover', border: '1px solid #f1f1f1' }} 
+                  />
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: 700, fontSize: '15px' }}>{item.name}</div>
                     <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>

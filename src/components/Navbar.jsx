@@ -195,7 +195,7 @@ const Navbar = () => {
                       display: 'flex', alignItems: 'center', justifyContent: 'center'
                     }}>
                       <img 
-                        src={user.image ? (user.image.startsWith('http') ? user.image : `http://localhost:5001${user.image}`) : 'https://img.icons8.com/ios-filled/50/2563eb/user-male-circle.png'} 
+                        src={user.image ? (user.image.startsWith('http') ? user.image : `${backendUrl}${user.image}`) : 'https://img.icons8.com/ios-filled/50/2563eb/user-male-circle.png'} 
                         alt="User" 
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       />

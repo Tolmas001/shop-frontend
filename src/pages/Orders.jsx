@@ -135,9 +135,10 @@ const Orders = () => {
               {order.items_list && order.items_list.map((item, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                   <img 
-                    src={item.image?.startsWith('/') ? `http://localhost:5001${item.image}` : (item.image || 'https://via.placeholder.com/60')} 
+                    src={item.image?.startsWith('/') ? `${backendUrl}${item.image}` : (item.image || 'https://via.placeholder.com/60')} 
                     alt={item.name} 
                     style={{ width: '60px', height: '60px', borderRadius: '12px', objectFit: 'cover', background: '#f3f4f6' }}
+                    onError={handleImageError}
                   />
                   <div style={{ flex: 1 }}>
                     <h4 style={{ fontSize: '15px', margin: 0 }}>{item.name}</h4>

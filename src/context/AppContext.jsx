@@ -3,7 +3,9 @@ import { auth, promo, notifications as notifyApi } from '../api';
 
 const AppContext = createContext();
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
+import { config } from '../config';
+
+const API_URL = config.apiUrl;
 const backendUrl = API_URL.replace('/api', '');
 
 const translations = {

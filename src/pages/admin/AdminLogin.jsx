@@ -88,7 +88,7 @@ const AdminLogin = () => {
         <button 
           type="button"
           className="btn btn-outline"
-          onClick={() => window.location.href = 'http://localhost:5001/auth/google'}
+          onClick={() => window.location.href = `${config.backendUrl}/auth/google`}
           style={{ 
             width: '100%', 
             display: 'flex', 

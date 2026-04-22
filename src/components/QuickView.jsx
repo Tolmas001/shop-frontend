@@ -62,7 +62,8 @@ const QuickView = ({ product, onClose }) => {
           {/* Image Section */}
           <div style={{ background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
             <img 
-              src={product.image?.startsWith('http') ? product.image : (product.image ? `http://localhost:5001${product.image}` : 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800')} 
+              src={product.image?.startsWith('http') ? product.image : (product.image ? `${backendUrl}${product.image}` : 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800')} 
+              onError={handleImageError}
               alt={product.name}
               style={{ width: '100%', maxHeight: '400px', objectFit: 'contain', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.1))' }}
             />

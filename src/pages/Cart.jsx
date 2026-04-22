@@ -70,7 +70,8 @@ const Cart = () => {
             }}
           >
             <img 
-              src={item.image?.startsWith('/') ? `http://localhost:5001${item.image}` : (item.image || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200')} 
+              src={item.image?.startsWith('/') ? `${backendUrl}${item.image}` : (item.image || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200')} 
+              onError={handleImageError}
               alt={item.name} 
               style={{ width: '100px', height: '100px', borderRadius: '16px', objectFit: 'cover' }}
             />
