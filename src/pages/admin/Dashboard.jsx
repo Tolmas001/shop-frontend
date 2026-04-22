@@ -11,6 +11,7 @@ import AdminUsers from './Users';
 import AdminReviews from './Reviews';
 import AdminManagement from './AdminManagement';
 import ActivityLogs from './ActivityLogs';
+import AdminPromoCodes from './PromoCodes';
 
 import { 
   MessageSquare,
@@ -29,7 +30,8 @@ import {
   AlertCircle,
   Bell,
   ShieldCheck,
-  History
+  History,
+  Ticket
 } from 'lucide-react';
 
 import { 
@@ -87,6 +89,9 @@ const AdminDashboard = () => {
           </Link>
           <Link to="/admin/reviews" className={isActive('/admin/reviews') ? 'sidebar-item active' : 'sidebar-item'}>
             <MessageSquare size={20} /> Sharhlar
+          </Link>
+          <Link to="/admin/promo" className={isActive('/admin/promo') ? 'sidebar-item active' : 'sidebar-item'}>
+            <Ticket size={20} /> Promo-kodlar
           </Link>
           
           {user?.role === 'superadmin' && (
@@ -376,6 +381,7 @@ const AdminDashboard = () => {
             <Route path="/reviews" element={<AdminReviews />} />
             <Route path="/management" element={<AdminManagement />} />
             <Route path="/logs" element={<ActivityLogs />} />
+            <Route path="/promo" element={<AdminPromoCodes />} />
           </Routes>
         </div>
       </div>

@@ -81,7 +81,11 @@ export const admin = {
 };
 
 export const promo = {
-  validate: (code) => api.post('/promo/validate', { code })
+  validate: (code) => api.post('/promo/validate', { code }),
+  getAllAdmin: () => api.get('/api/promo/admin'),
+  createAdmin: (data) => api.post('/api/promo/admin', data),
+  updateAdmin: (id, data) => api.put(`/api/promo/admin/${id}`, data),
+  deleteAdmin: (id) => api.delete(`/api/promo/admin/${id}`),
 };
 
 export const blogs = {
