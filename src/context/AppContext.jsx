@@ -6,7 +6,7 @@ const AppContext = createContext();
 import { config } from '../config';
 
 const API_URL = config.apiUrl;
-const backendUrl = API_URL.replace('/api', '');
+const backendUrl = config.backendUrl;
 
 const translations = {
   uz: {

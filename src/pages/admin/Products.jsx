@@ -241,39 +241,48 @@ const AdminProducts = () => {
                 </div>
                 
                 <div className="form-group">
-                  <label>Mahsulot rasmi (SVG, JPG, PNG)</label>
-                  <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                    {form.image && (
-                      <div style={{ width: '80px', height: '80px', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border)' }}>
+                  <label>Mahsulot rasmi</label>
+                  <div className="image-upload-modern" style={{ height: '140px' }}>
+                    {form.image ? (
+                      <div className="image-preview">
                         <img 
                           src={form.image.startsWith('data:') ? form.image : (form.image.startsWith('/') ? `${backendUrl}${form.image}` : form.image)} 
                           alt="Preview" 
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                           onError={handleImageError}
                         />
+                        <button 
+                          type="button" 
+                          className="remove-img" 
+                          onClick={() => setForm({ ...form, image: '' })}
+                        >
+                          ×
+                        </button>
                       </div>
+                    ) : (
+                      <label className="upload-placeholder">
+                        <input 
+                          type="file" 
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file) {
+                              const reader = new FileReader();
+                              reader.onloadend = () => {
+                                setForm({ ...form, image: reader.result });
+                              };
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                          hidden
+                        />
+                        <span style={{ fontSize: '24px', marginBottom: '8px' }}>+</span>
+                        <span>Rasm yuklash</span>
+                      </label>
                     )}
-                    <div style={{ flex: 1 }}>
-                      <input 
-                        type="file" 
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files[0];
-                          if (file) {
-                            const reader = new FileReader();
-                            reader.onloadend = () => {
-                              setForm({ ...form, image: reader.result });
-                            };
-                            reader.readAsDataURL(file);
-                          }
-                        }}
-                        style={{ width: '100%' }}
-                      />
-                      <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                        Tavsiya etiladi: 800x800px, 5MB gacha
-                      </p>
-                    </div>
                   </div>
+                  <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '8px' }}>
+                    Tavsiya etiladi: 800x800px, 5MB gacha
+                  </p>
                 </div>
                 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>

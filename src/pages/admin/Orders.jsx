@@ -68,6 +68,7 @@ const AdminOrders = () => {
               <th>Mijoz</th>
               <th>Telefon</th>
               <th>Manzil</th>
+              <th>Yetkazib berish</th>
               <th>Mahsulotlar</th>
               <th>Jami</th>
               <th>Holat</th>
@@ -82,6 +83,10 @@ const AdminOrders = () => {
                 <td>{order.customer_name}</td>
                 <td>{order.customer_phone}</td>
                 <td>{order.customer_address || '-'}</td>
+                <td>
+                  <div style={{ fontSize: '12px', textTransform: 'capitalize' }}>{order.delivery_method || 'standart'}</div>
+                  <div style={{ fontSize: '10px', color: '#888' }}>{order.delivery_cost > 0 ? `${order.delivery_cost.toLocaleString()} so'm` : 'Bepul'}</div>
+                </td>
                 <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {order.items || '-'}
                 </td>

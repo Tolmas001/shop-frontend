@@ -186,148 +186,198 @@ const Ads = () => {
           <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
             <motion.div 
               className="modal-content-modern"
-              style={{ maxWidth: '600px', width: '90%' }}
+              style={{ maxWidth: '1000px', width: '95%', padding: 0, overflow: 'hidden' }}
               onClick={e => e.stopPropagation()}
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
             >
-              <div className="modal-header">
-                <h3>{editingAd ? 'Reklamani tahrirlash' : 'Yangi reklama qo\'shish'}</h3>
+              <div className="modal-header" style={{ padding: '24px 32px', borderBottom: '1px solid #f1f1f1' }}>
+                <h3 style={{ margin: 0, fontSize: '20px' }}>{editingAd ? 'Reklamani tahrirlash' : 'Yangi reklama qo\'shish'}</h3>
                 <button className="close-btn" onClick={() => setIsModalOpen(false)}><X size={24} /></button>
               </div>
-              <form onSubmit={handleSubmit} className="admin-form">
-                <div className="form-grid">
-                  <div className="form-group">
-                    <label>Sarlavha</label>
-                    <input 
-                      type="text" 
-                      value={formData.title} 
-                      onChange={e => setFormData({ ...formData, title: e.target.value })}
-                      required 
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Sub-sarlavha</label>
-                    <input 
-                      type="text" 
-                      value={formData.subtitle} 
-                      onChange={e => setFormData({ ...formData, subtitle: e.target.value })}
-                    />
-                  </div>
-                  <div className="form-group full-width">
-                    <label>Tavsif</label>
-                    <textarea 
-                      value={formData.description} 
-                      onChange={e => setFormData({ ...formData, description: e.target.value })}
-                      rows="3"
-                    ></textarea>
-                  </div>
-                  <div className="form-group">
-                    <label>Tugma matni</label>
-                    <input 
-                      type="text" 
-                      value={formData.button_text} 
-                      onChange={e => setFormData({ ...formData, button_text: e.target.value })}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Link (Havola)</label>
-                    <input 
-                      type="text" 
-                      value={formData.link} 
-                      onChange={e => setFormData({ ...formData, link: e.target.value })}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Asosiy rang (HEX)</label>
-                    <div style={{ display: 'flex', gap: '10px' }}>
-                      <input 
-                        type="color" 
-                        value={formData.color} 
-                        onChange={e => setFormData({ ...formData, color: e.target.value })}
-                        style={{ width: '50px', height: '44px', padding: '2px' }}
-                      />
-                      <input 
-                        type="text" 
-                        value={formData.color} 
-                        onChange={e => setFormData({ ...formData, color: e.target.value })}
-                        style={{ flex: 1 }}
-                      />
-                    </div>
-                  </div>
-                  <div className="form-group">
-                    <label>Holati</label>
-                    <div className="flex-center" style={{ gap: '10px', height: '44px' }}>
-                      <input 
-                        type="checkbox" 
-                        checked={formData.is_active} 
-                        onChange={e => setFormData({ ...formData, is_active: e.target.checked })}
-                      />
-                      <span>Faol</span>
-                    </div>
-                  </div>
-                  <div className="form-group full-width">
-                    <label>Rasm</label>
-                    <div className="image-upload-modern">
-                      {formData.image ? (
-                        <div className="image-preview">
-                          <img 
-                            src={formData.image.startsWith('data:') ? formData.image : (formData.image?.startsWith('/') ? backendUrl + formData.image : formData.image)} 
-                            alt="Preview" 
+              
+              <form onSubmit={handleSubmit}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 0 }}>
+                  {/* Left Column: Form */}
+                  <div style={{ padding: '32px', borderRight: '1px solid #f1f1f1', maxHeight: '70vh', overflowY: 'auto' }}>
+                    <div className="form-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
+                      <div className="form-group">
+                        <label>Sarlavha</label>
+                        <input 
+                          type="text" 
+                          value={formData.title} 
+                          onChange={e => setFormData({ ...formData, title: e.target.value })}
+                          required 
+                          placeholder="Masalan: Yozgi Chegirma"
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Sub-sarlavha</label>
+                        <input 
+                          type="text" 
+                          value={formData.subtitle} 
+                          onChange={e => setFormData({ ...formData, subtitle: e.target.value })}
+                          placeholder="Masalan: Yangi kolleksiya"
+                        />
+                      </div>
+                      <div className="form-group full-width">
+                        <label>Tavsif</label>
+                        <textarea 
+                          value={formData.description} 
+                          onChange={e => setFormData({ ...formData, description: e.target.value })}
+                          rows="3"
+                          placeholder="Reklama haqida qisqacha ma'lumot..."
+                        ></textarea>
+                      </div>
+                      <div className="form-group">
+                        <label>Tugma matni</label>
+                        <input 
+                          type="text" 
+                          value={formData.button_text} 
+                          onChange={e => setFormData({ ...formData, button_text: e.target.value })}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Link (Havola)</label>
+                        <input 
+                          type="text" 
+                          value={formData.link} 
+                          onChange={e => setFormData({ ...formData, link: e.target.value })}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Asosiy rang</label>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <input 
+                            type="color" 
+                            value={formData.color} 
+                            onChange={e => setFormData({ ...formData, color: e.target.value })}
+                            style={{ width: '44px', height: '44px', padding: '4px', borderRadius: '8px', border: '1px solid #ddd', cursor: 'pointer' }}
                           />
-                          <button type="button" className="remove-img" onClick={() => setFormData({ ...formData, image: '' })}>
-                            <X size={16} />
-                          </button>
+                          <input 
+                            type="text" 
+                            value={formData.color} 
+                            onChange={e => setFormData({ ...formData, color: e.target.value })}
+                            style={{ flex: 1 }}
+                          />
                         </div>
-                      ) : (
-                        <label className="upload-placeholder">
-                          <input type="file" onChange={handleImageChange} accept="image/*" hidden />
-                          <ImageIcon size={32} />
-                          <span>Rasm yuklash</span>
-                        </label>
-                      )}
+                      </div>
+                      <div className="form-group">
+                        <label>Holati</label>
+                        <div 
+                          onClick={() => setFormData({ ...formData, is_active: !formData.is_active })}
+                          style={{ 
+                            height: '44px', display: 'flex', alignItems: 'center', gap: '12px', 
+                            padding: '0 16px', background: '#f8f9fa', borderRadius: '12px', cursor: 'pointer'
+                          }}
+                        >
+                          <div style={{ 
+                            width: '40px', height: '20px', background: formData.is_active ? 'var(--primary)' : '#ccc', 
+                            borderRadius: '10px', position: 'relative', transition: '0.3s'
+                          }}>
+                            <div style={{ 
+                              width: '14px', height: '14px', background: 'white', borderRadius: '50%',
+                              position: 'absolute', top: '3px', left: formData.is_active ? '23px' : '3px', transition: '0.3s'
+                            }}></div>
+                          </div>
+                          <span style={{ fontWeight: 600, fontSize: '14px' }}>{formData.is_active ? 'Faol' : 'Nofaol'}</span>
+                        </div>
+                      </div>
+                      <div className="form-group full-width">
+                        <label>Rasm</label>
+                        <div className="image-upload-modern" style={{ height: '140px' }}>
+                          {formData.image ? (
+                            <div className="image-preview">
+                              <img 
+                                src={formData.image.startsWith('data:') ? formData.image : (formData.image?.startsWith('/') ? backendUrl + formData.image : formData.image)} 
+                                alt="Preview" 
+                              />
+                              <button type="button" className="remove-img" onClick={() => setFormData({ ...formData, image: '' })}>
+                                <X size={16} />
+                              </button>
+                            </div>
+                          ) : (
+                            <label className="upload-placeholder">
+                              <input type="file" onChange={handleImageChange} accept="image/*" hidden />
+                              <ImageIcon size={32} />
+                              <span>Rasm yuklash yoki tashlang</span>
+                            </label>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="admin-ad-preview-section" style={{ marginTop: '20px', padding: '20px', background: '#f8f9fa', borderRadius: '12px', border: '1px solid #eee' }}>
-                  <label style={{ display: 'block', marginBottom: '15px', fontWeight: 600 }}>Banner Preview</label>
-                  <div 
-                    className="banner-slide" 
-                    style={{ 
-                      position: 'relative', height: '200px', width: '100%', borderRadius: '12px', overflow: 'hidden',
-                      backgroundColor: formData.color || '#111',
-                      backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url(${formData.image?.startsWith('data:') ? formData.image : (formData.image?.startsWith('/') ? backendUrl + formData.image : formData.image)})`,
-                      backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', alignItems: 'center', color: 'white', padding: '20px'
-                    }}
-                  >
-                    <div style={{ maxWidth: '100%' }}>
-                      <span style={{ 
-                        display: 'inline-block', padding: '4px 8px', background: formData.color || 'var(--primary)', 
-                        borderRadius: '4px', fontSize: '10px', fontWeight: 700, marginBottom: '8px', textTransform: 'uppercase' 
-                      }}>
-                        {formData.subtitle || 'Subtitle'}
-                      </span>
-                      <h4 style={{ fontSize: '18px', margin: '0 0 8px 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {formData.title || 'Title'}
-                      </h4>
-                      <p style={{ fontSize: '12px', margin: '0 0 12px 0', opacity: 0.9, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                        {formData.description || 'Description text goes here...'}
+                  {/* Right Column: Preview */}
+                  <div style={{ padding: '32px', background: '#f9fafb', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981' }}></div>
+                      <span style={{ fontWeight: 700, fontSize: '14px', color: '#374151' }}>Jonli ko'rinish (Live Preview)</span>
+                    </div>
+                    
+                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div 
+                        className="banner-slide" 
+                        style={{ 
+                          position: 'relative', height: '320px', width: '100%', borderRadius: '24px', overflow: 'hidden',
+                          backgroundColor: formData.color || '#111',
+                          backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url(${formData.image?.startsWith('data:') ? formData.image : (formData.image?.startsWith('/') ? backendUrl + formData.image : formData.image)})`,
+                          backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', alignItems: 'center', color: 'white', padding: '32px',
+                          boxShadow: '0 20px 40px rgba(0,0,0,0.1)'
+                        }}
+                      >
+                        <div style={{ maxWidth: '100%' }}>
+                          <motion.span 
+                            key={formData.subtitle}
+                            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                            style={{ 
+                              display: 'inline-block', padding: '6px 12px', background: formData.color || 'var(--primary)', 
+                              borderRadius: '6px', fontSize: '11px', fontWeight: 700, marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.5px'
+                            }}
+                          >
+                            {formData.subtitle || 'Sub-sarlavha'}
+                          </motion.span>
+                          <motion.h4 
+                            key={formData.title}
+                            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                            style={{ fontSize: '24px', margin: '0 0 12px 0', lineHeight: 1.2, fontWeight: 800 }}
+                          >
+                            {formData.title || 'Asosiy Sarlavha'}
+                          </motion.h4>
+                          <motion.p 
+                            key={formData.description}
+                            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                            style={{ fontSize: '14px', margin: '0 0 20px 0', opacity: 0.9, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
+                          >
+                            {formData.description || 'Reklama tavsifi bu yerda ko\'rinadi. Mijozlarni qiziqtiradigan matn yozing.'}
+                          </motion.p>
+                          <motion.button 
+                            type="button" 
+                            className="btn" 
+                            style={{ 
+                              background: formData.color || 'var(--primary)', border: 'none', color: 'white', 
+                              padding: '10px 24px', fontSize: '14px', borderRadius: '10px', fontWeight: 700,
+                              display: 'flex', alignItems: 'center', gap: '8px'
+                            }}
+                          >
+                            {formData.button_text} <ExternalLink size={16} />
+                          </motion.button>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div style={{ marginTop: '24px', padding: '16px', background: 'white', borderRadius: '16px', border: '1px solid #f1f1f1' }}>
+                      <p style={{ margin: 0, fontSize: '12px', color: '#6B7280', lineHeight: 1.5 }}>
+                        <strong>Eslatma:</strong> Rang va rasm tanlashda matn o'qilishi oson bo'lishiga e'tibor bering. To'qroq fonlar uchun oq matn tavsiya etiladi.
                       </p>
-                      <button type="button" className="btn" style={{ 
-                        background: formData.color || 'var(--primary)', border: 'none', color: 'white', 
-                        padding: '6px 12px', fontSize: '12px', borderRadius: '6px' 
-                      }}>
-                        {formData.button_text}
-                      </button>
                     </div>
                   </div>
                 </div>
 
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-outline" onClick={() => setIsModalOpen(false)}>Bekor qilish</button>
-                  <button type="submit" className="btn btn-primary">{editingAd ? 'Saqlash' : 'Qo\'shish'}</button>
+                <div className="modal-footer" style={{ padding: '24px 32px', background: 'white', borderTop: '1px solid #f1f1f1' }}>
+                  <button type="button" className="btn btn-outline" onClick={() => setIsModalOpen(false)} style={{ padding: '12px 24px' }}>Bekor qilish</button>
+                  <button type="submit" className="btn btn-primary" style={{ padding: '12px 32px', minWidth: '160px' }}>{editingAd ? 'Saqlash' : 'Qo\'shish'}</button>
                 </div>
               </form>
             </motion.div>

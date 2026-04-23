@@ -38,32 +38,32 @@ const Home = () => {
   const defaultBanners = [
     {
       id: 1,
-      title: "Yangi Kolleksiya 2026",
-      subtitle: "Smartfonlar va Gadjetlar",
-      description: "Eng so'nggi texnologiyalar endi hamyonbop narxlarda. 30% gacha chegirmalar!",
-      image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1600",
-      button_text: "Hoziroq harid qiling",
-      color: "#2563EB",
+      title: "Tabiiy Yuz Parvarishi",
+      subtitle: "Organik Kosmetika",
+      description: "Terini chuqur namlantiruvchi va oziqlantiruvchi vitaminli kremlar to'plami.",
+      image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=1600",
+      button_text: "Sotib olish",
+      color: "#DB2777",
       link: "/products"
     },
     {
       id: 2,
-      title: "Bahoriy Chegirmalar",
-      subtitle: "Kiyim-kechak va Aksessuarlar",
-      description: "Uslubingizni yangilang. Barcha kiyimlarga 50% gacha chegirma!",
-      image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600",
+      title: "Professional Makiyaj",
+      subtitle: "Yozgi Kolleksiya",
+      description: "Eng sara pardoz vositalari bilan o'zingizga bo'lgan ishonchni oshiring.",
+      image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1600",
       button_text: "Katalogni ko'rish",
-      color: "#059669",
+      color: "#9333EA",
       link: "/products"
     },
     {
       id: 3,
-      title: "Aqlli Uy Tizimlari",
-      subtitle: "Uy anjomlari",
-      description: "Uyingizni kelajak texnologiyalari bilan jihozlang. O'rnatish bepul!",
-      image: "https://images.unsplash.com/photo-1558002038-1055907df827?w=1600",
-      button_text: "Batafsil ma'lumot",
-      color: "#7C3AED",
+      title: "Hashamatli Iforlar",
+      subtitle: "Premium Parfyumeriya",
+      description: "Uzoq vaqt saqlanib qoluvchi fransuz atirlari endi bizda mavjud.",
+      image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=1600",
+      button_text: "Batafsil",
+      color: "#059669",
       link: "/products"
     }
   ];
@@ -344,7 +344,7 @@ const Home = () => {
             </Link>
           </div>
           <div className="offer-visual-content">
-            <img src="https://images.unsplash.com/photo-1491933382434-500287f9b54b?w=800" alt="Special Offer" />
+            <img src="https://images.unsplash.com/photo-1596462502278-27bfad450216?w=800" alt="Special Offer" />
           </div>
         </div>
       </section>

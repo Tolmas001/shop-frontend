@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useApp } from '../context/AppContext';
 
 const Cart = () => {
-  const { cart, removeFromCart, updateQuantity, cartTotal, clearCart, t, backendUrl, appliedPromo, applyPromoCode, formatPrice } = useApp();
+  const { cart, removeFromCart, updateQuantity, cartTotal, clearCart, t, backendUrl, appliedPromo, applyPromoCode, formatPrice, handleImageError } = useApp();
   const navigate = useNavigate();
   const [promoInput, setPromoInput] = useState('');
   const [promoError, setPromoError] = useState('');

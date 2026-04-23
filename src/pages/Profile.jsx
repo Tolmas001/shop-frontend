@@ -320,7 +320,7 @@ const Profile = () => {
                     {/* Avatar */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '24px', marginBottom: '36px' }}>
                       <div style={{ position: 'relative' }}>
-                        <div style={{ width: '100px', height: '100px', borderRadius: '30px', overflow: 'hidden', border: '3px solid var(--border-color)', background: '#f3f4f6' }}>
+                        <div style={{ width: '100px', height: '100px', borderRadius: '30px', overflow: 'hidden', border: '3px solid var(--border-color)', background: '#f3f4f6', position: 'relative' }}>
                           <img
                             src={form.image
                               ? (form.image.startsWith('data') || form.image.startsWith('http') ? form.image : `${backendUrl}${form.image}`)
@@ -328,12 +328,27 @@ const Profile = () => {
                             alt="avatar"
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                           />
+                          {form.image && (
+                            <button 
+                              type="button" 
+                              onClick={() => setForm({ ...form, image: '' })}
+                              style={{ 
+                                position: 'absolute', top: '5px', right: '5px', 
+                                background: 'rgba(239, 68, 68, 0.8)', color: 'white', 
+                                border: 'none', borderRadius: '50%', width: '24px', height: '24px', 
+                                display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                                cursor: 'pointer', zIndex: 10 
+                              }}
+                            >
+                              <X size={14} />
+                            </button>
+                          )}
                         </div>
                         <label htmlFor="avatar-upload" style={{
                           position: 'absolute', bottom: '-8px', right: '-8px',
                           background: 'var(--primary)', color: 'white',
                           padding: '8px', borderRadius: '12px', cursor: 'pointer',
-                          border: '2px solid var(--bg-card)', display: 'flex'
+                          border: '2px solid var(--bg-card)', display: 'flex', zIndex: 11
                         }}>
                           <Globe size={16} />
                         </label>

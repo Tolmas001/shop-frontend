@@ -7,13 +7,14 @@ import { useApp } from '../context/AppContext';
 import { Banknote, CreditCard, Lock, MapPin } from 'lucide-react';
 
 const Checkout = () => {
-  const { cart, cartTotal, clearCart, user, t, appliedPromo, usePoints, setUsePoints, formatPrice } = useApp();
+  const { cart, cartTotal, clearCart, user, t, appliedPromo, usePoints, setUsePoints, formatPrice, backendUrl } = useApp();
   const [form, setForm] = useState({ 
     customer_name: user?.full_name || user?.username || '', 
     customer_phone: user?.phone || '', 
     customer_address: '' 
   });
   const [paymentMethod, setPaymentMethod] = useState('cash'); // 'cash' or 'card'
+  const [deliveryMethod, setDeliveryMethod] = useState('standard');
   const [cardInfo, setCardInfo] = useState({ number: '', expiry: '', cvv: '' });
   const [selectedCardId, setSelectedCardId] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -25,15 +26,22 @@ const Checkout = () => {
     setCardInfo({ number: card.number, expiry: card.expiry, cvv: '' });
   };
 
+  const handleImageError = (e) => {
+    e.target.src = 'https://via.placeholder.com/64';
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage('');
     
     try {
+      const deliveryCost = deliveryMethod === 'express' ? 50000 : (deliveryMethod === 'standard' && cartTotal < 500000 ? 20000 : 0);
       const res = await orders.create({
         ...form,
         payment_method: paymentMethod,
+        delivery_method: deliveryMethod,
+        delivery_cost: deliveryCost,
         promo_code: appliedPromo?.code,
         use_points: usePoints,
         items: cart.map(item => ({ id: item.id, quantity: item.quantity, price: item.price }))
@@ -176,6 +184,37 @@ const Checkout = () => {
                 onChange={e => setForm({...form, customer_address: e.target.value})} 
                 required
               />
+            </div>
+          </div>
+
+          {/* Delivery Method */}
+          <div style={{ background: 'white', padding: '32px', borderRadius: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)', border: '1px solid #f1f1f1' }}>
+            <h3 style={{ marginBottom: '24px' }}>Yetkazib berish usuli</h3>
+            <div style={{ display: 'grid', gap: '16px' }}>
+              {[
+                { id: 'standard', name: 'Standart', desc: '24-48 soat ichida', price: cartTotal >= 500000 ? 0 : 20000 },
+                { id: 'express', name: 'Tezkor', desc: '2-4 soat ichida', price: 50000 },
+                { id: 'pickup', name: 'Olib ketish', desc: "Do'kondan olib ketish", price: 0 }
+              ].map(method => (
+                <div 
+                  key={method.id}
+                  onClick={() => setDeliveryMethod(method.id)}
+                  style={{ 
+                    padding: '20px', borderRadius: '16px', cursor: 'pointer',
+                    border: `2px solid ${deliveryMethod === method.id ? 'var(--primary)' : '#f1f1f1'}`,
+                    background: deliveryMethod === method.id ? 'rgba(37, 99, 235, 0.05)' : 'white',
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center', transition: '0.3s'
+                  }}
+                >
+                  <div>
+                    <div style={{ fontWeight: 700 }}>{method.name}</div>
+                    <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>{method.desc}</div>
+                  </div>
+                  <div style={{ fontWeight: 800, color: 'var(--text-main)' }}>
+                    {method.price === 0 ? 'Bepul' : formatPrice(method.price)}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -335,12 +374,17 @@ const Checkout = () => {
                   <span>-{formatPrice(Math.min(user.points * 1000, Math.floor(cartTotal * (1 - (appliedPromo?.discount_percent || 0) / 100) / 1000) * 1000))}</span>
                 </div>
               )}
+              <div style={{ display: 'flex', justifyContent: 'space-between', color: '#86868b' }}>
+                <span>Yetkazib berish:</span>
+                <span>{deliveryMethod === 'express' ? formatPrice(50000) : (deliveryMethod === 'standard' && cartTotal < 500000 ? formatPrice(20000) : 'Bepul')}</span>
+              </div>
               <div style={{ height: '1px', background: '#f1f1f1', margin: '8px 0' }} />
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '20px', fontWeight: 800 }}>
                 <span>Jami:</span>
                 <span style={{ color: 'var(--primary)', fontSize: '24px' }}>
                   {formatPrice(Math.floor(
-                    (cartTotal * (1 - (appliedPromo?.discount_percent || 0) / 100)) - 
+                    (cartTotal * (1 - (appliedPromo?.discount_percent || 0) / 100)) + 
+                    (deliveryMethod === 'express' ? 50000 : (deliveryMethod === 'standard' && cartTotal < 500000 ? 20000 : 0)) - 
                     (usePoints ? Math.min(user.points * 1000, Math.floor(cartTotal * (1 - (appliedPromo?.discount_percent || 0) / 100) / 1000) * 1000) : 0)
                   ))}
                 </span>
