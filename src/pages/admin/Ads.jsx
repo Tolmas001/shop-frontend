@@ -125,6 +125,7 @@ const Ads = () => {
                   <th>Sarlavha</th>
                   <th>Sub-sarlavha</th>
                   <th>Tugma matni</th>
+                  <th>Rang</th>
                   <th>Holati</th>
                   <th>Amallar</th>
                 </tr>
@@ -143,6 +144,12 @@ const Ads = () => {
                     <td><div className="font-600">{ad.title}</div></td>
                     <td><div className="text-muted">{ad.subtitle}</div></td>
                     <td>{ad.button_text}</td>
+                    <td>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ width: '20px', height: '20px', borderRadius: '4px', background: ad.color, border: '1px solid #ddd' }}></div>
+                        <span style={{ fontSize: '12px', color: '#666' }}>{ad.color}</span>
+                      </div>
+                    </td>
                     <td>
                       <span className={`status-badge ${ad.is_active ? 'paid' : 'cancelled'}`}>
                         {ad.is_active ? 'Faol' : 'Nofaol'}
@@ -266,7 +273,7 @@ const Ads = () => {
                       {formData.image ? (
                         <div className="image-preview">
                           <img 
-                            src={formData.image.startsWith('/') ? `${backendUrl}${formData.image}` : formData.image} 
+                            src={formData.image.startsWith('data:') ? formData.image : (formData.image?.startsWith('/') ? backendUrl + formData.image : formData.image)} 
                             alt="Preview" 
                           />
                           <button type="button" className="remove-img" onClick={() => setFormData({ ...formData, image: '' })}>
@@ -283,6 +290,41 @@ const Ads = () => {
                     </div>
                   </div>
                 </div>
+
+                <div className="admin-ad-preview-section" style={{ marginTop: '20px', padding: '20px', background: '#f8f9fa', borderRadius: '12px', border: '1px solid #eee' }}>
+                  <label style={{ display: 'block', marginBottom: '15px', fontWeight: 600 }}>Banner Preview</label>
+                  <div 
+                    className="banner-slide" 
+                    style={{ 
+                      position: 'relative', height: '200px', width: '100%', borderRadius: '12px', overflow: 'hidden',
+                      backgroundColor: formData.color || '#111',
+                      backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url(${formData.image?.startsWith('data:') ? formData.image : (formData.image?.startsWith('/') ? backendUrl + formData.image : formData.image)})`,
+                      backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', alignItems: 'center', color: 'white', padding: '20px'
+                    }}
+                  >
+                    <div style={{ maxWidth: '100%' }}>
+                      <span style={{ 
+                        display: 'inline-block', padding: '4px 8px', background: formData.color || 'var(--primary)', 
+                        borderRadius: '4px', fontSize: '10px', fontWeight: 700, marginBottom: '8px', textTransform: 'uppercase' 
+                      }}>
+                        {formData.subtitle || 'Subtitle'}
+                      </span>
+                      <h4 style={{ fontSize: '18px', margin: '0 0 8px 0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {formData.title || 'Title'}
+                      </h4>
+                      <p style={{ fontSize: '12px', margin: '0 0 12px 0', opacity: 0.9, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                        {formData.description || 'Description text goes here...'}
+                      </p>
+                      <button type="button" className="btn" style={{ 
+                        background: formData.color || 'var(--primary)', border: 'none', color: 'white', 
+                        padding: '6px 12px', fontSize: '12px', borderRadius: '6px' 
+                      }}>
+                        {formData.button_text}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="modal-footer">
                   <button type="button" className="btn btn-outline" onClick={() => setIsModalOpen(false)}>Bekor qilish</button>
                   <button type="submit" className="btn btn-primary">{editingAd ? 'Saqlash' : 'Qo\'shish'}</button>

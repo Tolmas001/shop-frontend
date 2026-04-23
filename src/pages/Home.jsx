@@ -142,6 +142,7 @@ const Home = () => {
             exit={{ opacity: 0, x: -50 }}
             transition={{ duration: 0.6 }}
             style={{ 
+              backgroundColor: activeBanners[currentBanner].color || '#111',
               backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url(${activeBanners[currentBanner].image?.startsWith('/') ? backendUrl + activeBanners[currentBanner].image : activeBanners[currentBanner].image})` 
             }}
           >
@@ -152,6 +153,7 @@ const Home = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
                   className="banner-subtitle"
+                  style={{ background: activeBanners[currentBanner].color || 'var(--primary)' }}
                 >
                   {activeBanners[currentBanner].subtitle}
                 </motion.span>
@@ -174,7 +176,11 @@ const Home = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
                 >
-                  <Link to={activeBanners[currentBanner].link || "/products"} className="btn btn-primary banner-btn">
+                  <Link 
+                    to={activeBanners[currentBanner].link || "/products"} 
+                    className="btn banner-btn"
+                    style={{ background: activeBanners[currentBanner].color || 'var(--primary)', border: 'none', color: 'white' }}
+                  >
                     {activeBanners[currentBanner].button_text} <ArrowRight size={20} />
                   </Link>
                 </motion.div>
@@ -198,6 +204,7 @@ const Home = () => {
               key={idx} 
               className={`dot ${currentBanner === idx ? 'active' : ''}`}
               onClick={() => setCurrentBanner(idx)}
+              style={{ background: currentBanner === idx ? (activeBanners[idx].color || 'var(--primary)') : 'rgba(255,255,255,0.3)' }}
             ></div>
           ))}
         </div>
