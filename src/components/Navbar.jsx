@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import LanguageToggle from './LanguageToggle/LanguageToggle';
@@ -24,7 +24,7 @@ import CatalogMenu from './CatalogMenu';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
-  const { user, cartCount, logout, t, theme, toggleTheme, favorites, notifications, markAsRead, markAllAsRead } = useApp();
+  const { user, cartCount, logout, t, theme, toggleTheme, favorites, notifications, markAsRead, markAllAsRead, backendUrl } = useApp();
   const navigate = useNavigate();
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -33,13 +33,27 @@ const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  
+  const notifRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
+
+    const handleClickOutside = (event) => {
+      if (notifRef.current && !notifRef.current.contains(event.target)) {
+        setIsNotificationsOpen(false);
+      }
+    };
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    document.addEventListener('mousedown', handleClickOutside);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -130,7 +144,7 @@ const Navbar = () => {
               </Link>
             </div>
 
-            <div className="notification-container">
+            <div className="notification-container" ref={notifRef}>
               <button 
                 className={`nav-btn notification-btn ${isNotificationsOpen ? 'active' : ''}`}
                 onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}

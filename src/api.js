@@ -109,4 +109,12 @@ export const superAdmin = {
   getLogs: () => api.get('/super-admin/logs'),
 };
 
+export const ads = {
+  getAll: () => api.get('/ads'),
+  getAdmin: () => api.get('/ads/admin'),
+  create: (data) => api.post('/ads', data),
+  update: (id, data) => api.put(`/ads/${id}`, data),
+  delete: (id) => api.delete(`/ads/${id}`),
+};
+
 export default api;

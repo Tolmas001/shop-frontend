@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProductCard from '../components/ProductCard';
-import { products, categories as apiCategories } from '../api';
+import { products, categories as apiCategories, ads } from '../api';
 import { useApp } from '../context/AppContext';
 import Skeleton from '../components/Skeleton';
 import { 
@@ -25,7 +25,7 @@ import {
 } from 'lucide-react';
 
 const Home = () => {
-  const { t } = useApp();
+  const { t, backendUrl } = useApp();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const [productsList, setProductsList] = useState([]);
@@ -33,43 +33,57 @@ const Home = () => {
   const [searchQuery, setSearchQuery] = useState(searchParams.get('name') || '');
   const [timeLeft, setTimeLeft] = useState({ hours: 12, mins: 45, secs: 30 });
   const [currentBanner, setCurrentBanner] = useState(0);
+  const [adsList, setAdsList] = useState([]);
 
-  const banners = [
+  const defaultBanners = [
     {
       id: 1,
       title: "Yangi Kolleksiya 2026",
       subtitle: "Smartfonlar va Gadjetlar",
-      desc: "Eng so'nggi texnologiyalar endi hamyonbop narxlarda. 30% gacha chegirmalar!",
+      description: "Eng so'nggi texnologiyalar endi hamyonbop narxlarda. 30% gacha chegirmalar!",
       image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1600",
-      btnText: "Hoziroq harid qiling",
-      color: "#2563EB"
+      button_text: "Hoziroq harid qiling",
+      color: "#2563EB",
+      link: "/products"
     },
     {
       id: 2,
       title: "Bahoriy Chegirmalar",
       subtitle: "Kiyim-kechak va Aksessuarlar",
-      desc: "Uslubingizni yangilang. Barcha kiyimlarga 50% gacha chegirma!",
+      description: "Uslubingizni yangilang. Barcha kiyimlarga 50% gacha chegirma!",
       image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600",
-      btnText: "Katalogni ko'rish",
-      color: "#059669"
+      button_text: "Katalogni ko'rish",
+      color: "#059669",
+      link: "/products"
     },
     {
       id: 3,
       title: "Aqlli Uy Tizimlari",
       subtitle: "Uy anjomlari",
-      desc: "Uyingizni kelajak texnologiyalari bilan jihozlang. O'rnatish bepul!",
+      description: "Uyingizni kelajak texnologiyalari bilan jihozlang. O'rnatish bepul!",
       image: "https://images.unsplash.com/photo-1558002038-1055907df827?w=1600",
-      btnText: "Batafsil ma'lumot",
-      color: "#7C3AED"
+      button_text: "Batafsil ma'lumot",
+      color: "#7C3AED",
+      link: "/products"
     }
   ];
 
+  const activeBanners = adsList.length > 0 ? adsList : defaultBanners;
+
+  useEffect(() => {
+    ads.getAll().then(res => {
+      if (res.data && res.data.length > 0) {
+        setAdsList(res.data);
+      }
+    }).catch(err => console.error('Error fetching ads:', err));
+  }, []);
+
   useEffect(() => {
     const slideInterval = setInterval(() => {
-      setCurrentBanner(prev => (prev + 1) % banners.length);
+      setCurrentBanner(prev => (prev + 1) % activeBanners.length);
     }, 5000);
     return () => clearInterval(slideInterval);
-  }, [banners.length]);
+  }, [activeBanners.length]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -127,7 +141,9 @@ const Home = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -50 }}
             transition={{ duration: 0.6 }}
-            style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url(${banners[currentBanner].image})` }}
+            style={{ 
+              backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url(${activeBanners[currentBanner].image?.startsWith('/') ? backendUrl + activeBanners[currentBanner].image : activeBanners[currentBanner].image})` 
+            }}
           >
             <div className="container">
               <div className="banner-content">
@@ -137,29 +153,29 @@ const Home = () => {
                   transition={{ delay: 0.2 }}
                   className="banner-subtitle"
                 >
-                  {banners[currentBanner].subtitle}
+                  {activeBanners[currentBanner].subtitle}
                 </motion.span>
                 <motion.h1 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
                 >
-                  {banners[currentBanner].title}
+                  {activeBanners[currentBanner].title}
                 </motion.h1>
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
                 >
-                  {banners[currentBanner].desc}
+                  {activeBanners[currentBanner].description}
                 </motion.p>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
                 >
-                  <Link to="/products" className="btn btn-primary banner-btn">
-                    {banners[currentBanner].btnText} <ArrowRight size={20} />
+                  <Link to={activeBanners[currentBanner].link || "/products"} className="btn btn-primary banner-btn">
+                    {activeBanners[currentBanner].button_text} <ArrowRight size={20} />
                   </Link>
                 </motion.div>
               </div>
@@ -168,16 +184,16 @@ const Home = () => {
         </AnimatePresence>
 
         <div className="slider-controls">
-          <button className="slider-arrow prev" onClick={() => setCurrentBanner(prev => (prev - 1 + banners.length) % banners.length)}>
+          <button className="slider-arrow prev" onClick={() => setCurrentBanner(prev => (prev - 1 + activeBanners.length) % activeBanners.length)}>
             <ChevronLeft size={24} />
           </button>
-          <button className="slider-arrow next" onClick={() => setCurrentBanner(prev => (prev + 1) % banners.length)}>
+          <button className="slider-arrow next" onClick={() => setCurrentBanner(prev => (prev + 1) % activeBanners.length)}>
             <ChevronRight size={24} />
           </button>
         </div>
 
         <div className="slider-dots">
-          {banners.map((_, idx) => (
+          {activeBanners.map((_, idx) => (
             <div 
               key={idx} 
               className={`dot ${currentBanner === idx ? 'active' : ''}`}
