@@ -32,6 +32,7 @@ const ProductDetail = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [activeImage, setActiveImage] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
+  const [activeTab, setActiveTab] = useState('reviews');
   const [isOneClickModalOpen, setIsOneClickModalOpen] = useState(false);
   const [oneClickForm, setOneClickForm] = useState({ name: '', phone: '' });
 
@@ -114,6 +115,18 @@ const ProductDetail = () => {
       </Link>
     </div>
   );
+
+  const defaultSpecs = {
+    [t('brand')]: product.brand,
+    [t('nav_categories')]: product.category,
+    [t('select_color')]: product.colors?.join(', ') || t('nothing_found'),
+    [t('select_size')]: product.sizes?.join(', ') || t('nothing_found'),
+    [t('order_status')]: product.stock_count > 0 ? t('in_stock') : t('out_of_stock')
+  };
+
+  const specs = (product.specifications && Object.keys(product.specifications).length > 0) 
+    ? product.specifications 
+    : defaultSpecs;
 
   return (
     <div className="container section">
@@ -282,110 +295,145 @@ const ProductDetail = () => {
 
       <div style={{ marginTop: '100px', borderTop: '1px solid var(--border)', paddingTop: '60px' }}>
         <div style={{ display: 'flex', gap: '40px', marginBottom: '60px', borderBottom: '1px solid var(--border)' }}>
-          <button style={{ paddingBottom: '20px', borderBottom: '3px solid var(--primary)', fontWeight: 700, fontSize: '20px' }}>
+          <button 
+            onClick={() => setActiveTab('reviews')}
+            style={{ 
+              paddingBottom: '20px', 
+              borderBottom: activeTab === 'reviews' ? '3px solid var(--primary)' : 'none', 
+              fontWeight: activeTab === 'reviews' ? 700 : 600, 
+              color: activeTab === 'reviews' ? 'var(--text-main)' : 'var(--text-muted)',
+              fontSize: '20px' 
+            }}
+          >
             {t('reviews')} ({product.comments?.length || 0})
           </button>
-          <button style={{ paddingBottom: '20px', color: 'var(--text-muted)', fontWeight: 600, fontSize: '20px' }}>
+          <button 
+            onClick={() => setActiveTab('specs')}
+            style={{ 
+              paddingBottom: '20px', 
+              borderBottom: activeTab === 'specs' ? '3px solid var(--primary)' : 'none', 
+              fontWeight: activeTab === 'specs' ? 700 : 600, 
+              color: activeTab === 'specs' ? 'var(--text-main)' : 'var(--text-muted)',
+              fontSize: '20px' 
+            }}
+          >
             {t('specifications')}
           </button>
         </div>
 
-        <div className="comments-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '80px' }}>
-          {/* Write a review */}
-          <div>
-            <div style={{ background: '#F9FAFB', padding: '32px', borderRadius: '24px', position: 'sticky', top: '120px' }}>
-              <h3 style={{ marginBottom: '24px' }}>{t('leave_review')}</h3>
-              {user ? (
-                <form onSubmit={handleSubmitComment}>
-                  <div className="form-group">
-                    <label>{t('your_opinion')}</label>
-                    <textarea 
-                      style={{ height: '120px', resize: 'none' }}
-                      value={commentText}
-                      onChange={e => setCommentText(e.target.value)}
-                      placeholder={t('opinion_placeholder')}
-                      required
-                    ></textarea>
-                  </div>
-                  <div className="form-group">
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <ImageIcon size={16} /> {t('upload_image')}
-                    </label>
-                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                      {commentImage && (
-                        <div style={{ width: '50px', height: '50px', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border)' }}>
-                          <img src={commentImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                        </div>
-                      )}
-                      <input 
-                        type="file" 
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files[0];
-                          if (file) {
-                            const reader = new FileReader();
-                            reader.onloadend = () => setCommentImage(reader.result);
-                            reader.readAsDataURL(file);
-                          }
-                        }}
-                      />
+        {activeTab === 'reviews' ? (
+          <div className="comments-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '80px' }}>
+            {/* Write a review */}
+            <div>
+              <div style={{ background: '#F9FAFB', padding: '32px', borderRadius: '24px', position: 'sticky', top: '120px' }}>
+                <h3 style={{ marginBottom: '24px' }}>{t('leave_review')}</h3>
+                {user ? (
+                  <form onSubmit={handleSubmitComment}>
+                    <div className="form-group">
+                      <label>{t('your_opinion')}</label>
+                      <textarea 
+                        style={{ height: '120px', resize: 'none' }}
+                        value={commentText}
+                        onChange={e => setCommentText(e.target.value)}
+                        placeholder={t('opinion_placeholder')}
+                        required
+                      ></textarea>
                     </div>
+                    <div className="form-group">
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <ImageIcon size={16} /> {t('upload_image')}
+                      </label>
+                      <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                        {commentImage && (
+                          <div style={{ width: '50px', height: '50px', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border)' }}>
+                            <img src={commentImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          </div>
+                        )}
+                        <input 
+                          type="file" 
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file) {
+                              const reader = new FileReader();
+                              reader.onloadend = () => setCommentImage(reader.result);
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <button type="submit" className="btn btn-primary" style={{ width: '100%', gap: '10px' }}>
+                      <Send size={18} /> {t('send')}
+                    </button>
+                  </form>
+                ) : (
+                  <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                    <p style={{ color: 'var(--text-muted)', marginBottom: '16px' }}>{t('login_to_comment')}</p>
+                    <Link to="/login" className="btn btn-secondary">{t('login')}</Link>
                   </div>
-                  <button type="submit" className="btn btn-primary" style={{ width: '100%', gap: '10px' }}>
-                    <Send size={18} /> {t('send')}
-                  </button>
-                </form>
+                )}
+              </div>
+            </div>
+
+            {/* List reviews */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+              {product.comments && product.comments.length > 0 ? (
+                product.comments.map((comment, index) => (
+                  <div key={index} style={{ borderBottom: '1px solid var(--border)', paddingBottom: '32px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <div style={{ width: '40px', height: '40px', background: '#e5e7eb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>
+                          {comment.username[0].toUpperCase()}
+                        </div>
+                        <div>
+                          <h4 style={{ fontSize: '16px' }}>{comment.username}</h4>
+                          <div style={{ display: 'flex', color: '#F59E0B' }}>
+                            {[1,2,3,4,5].map(i => <Star key={i} size={12} fill="#F59E0B" />)}
+                          </div>
+                        </div>
+                      </div>
+                      <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
+                        {new Date(comment.timestamp).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <p style={{ lineHeight: '1.6', color: '#4B5563', marginBottom: '16px' }}>{comment.text}</p>
+                    {comment.image && (
+                      <div style={{ width: '120px', height: '120px', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border)' }}>
+                        <img 
+                          src={comment.image.startsWith('/') ? `${backendUrl}${comment.image}` : comment.image} 
+                          alt="User upload" 
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                        />
+                      </div>
+                    )}
+                  </div>
+                ))
               ) : (
-                <div style={{ textAlign: 'center', padding: '20px 0' }}>
-                  <p style={{ color: 'var(--text-muted)', marginBottom: '16px' }}>{t('login_to_comment')}</p>
-                  <Link to="/login" className="btn btn-secondary">{t('login')}</Link>
+                <div style={{ textAlign: 'center', padding: '60px 0' }}>
+                  <MessageSquare size={48} color="#D1D5DB" style={{ marginBottom: '16px' }} />
+                  <h3>{t('no_reviews')}</h3>
+                  <p style={{ color: 'var(--text-muted)' }}>{t('be_first_review')}</p>
                 </div>
               )}
             </div>
           </div>
-
-          {/* List reviews */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-            {product.comments && product.comments.length > 0 ? (
-              product.comments.map((comment, index) => (
-                <div key={index} style={{ borderBottom: '1px solid var(--border)', paddingBottom: '32px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <div style={{ width: '40px', height: '40px', background: '#e5e7eb', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>
-                        {comment.username[0].toUpperCase()}
-                      </div>
-                      <div>
-                        <h4 style={{ fontSize: '16px' }}>{comment.username}</h4>
-                        <div style={{ display: 'flex', color: '#F59E0B' }}>
-                          {[1,2,3,4,5].map(i => <Star key={i} size={12} fill="#F59E0B" />)}
-                        </div>
-                      </div>
-                    </div>
-                    <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
-                      {new Date(comment.timestamp).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <p style={{ lineHeight: '1.6', color: '#4B5563', marginBottom: '16px' }}>{comment.text}</p>
-                  {comment.image && (
-                    <div style={{ width: '120px', height: '120px', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border)' }}>
-                      <img 
-                        src={comment.image.startsWith('/') ? `${backendUrl}${comment.image}` : comment.image} 
-                        alt="User upload" 
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                      />
-                    </div>
-                  )}
-                </div>
-              ))
-            ) : (
-              <div style={{ textAlign: 'center', padding: '60px 0' }}>
-                <MessageSquare size={48} color="#D1D5DB" style={{ marginBottom: '16px' }} />
-                <h3>{t('no_reviews')}</h3>
-                <p style={{ color: 'var(--text-muted)' }}>{t('be_first_review')}</p>
+        ) : (
+          <div className="specifications-list" style={{ maxWidth: '800px' }}>
+            {Object.entries(specs).map(([key, value], i) => (
+              <div 
+                key={i} 
+                style={{ 
+                  display: 'flex', justifyContent: 'space-between', padding: '20px 0', 
+                  borderBottom: '1px solid var(--border)', fontSize: '16px' 
+                }}
+              >
+                <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>{key}</span>
+                <span style={{ fontWeight: 700 }}>{value}</span>
               </div>
-            )}
+            ))}
           </div>
-        </div>
+        )}
       </div>
 
       {/* Related Products Section */}

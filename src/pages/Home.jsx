@@ -20,7 +20,8 @@ import {
   Headphones,
   ChevronLeft,
   ChevronRight,
-  ChevronDown
+  ChevronDown,
+  Sparkles
 } from 'lucide-react';
 
 const Home = () => {
@@ -89,6 +90,7 @@ const Home = () => {
 
   const categoryTiles = [
     { name: t('cat_electronics'), icon: <Smartphone size={32} />, color: '#EFF6FF' },
+    { name: t('cat_creams'), icon: <Sparkles size={32} />, color: '#FDF2F8', link: '/products?category=krem' },
     { name: t('cat_clothing'), icon: <Shirt size={32} />, color: '#FEF3C7' },
     { name: t('cat_shoes'), icon: <ShoppingBag size={32} />, color: '#ECFDF5' },
     { name: t('cat_accessories'), icon: <Watch size={32} />, color: '#F5F3FF' },
@@ -203,7 +205,7 @@ const Home = () => {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
               >
-                <Link to={`/products?category=${cat.name}`} className="category-card-inner">
+                <Link to={cat.link || `/products?category=${cat.name}`} className="category-card-inner">
                   <div className="category-icon-box" style={{ backgroundColor: cat.color }}>
                     {cat.icon}
                   </div>

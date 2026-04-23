@@ -7,7 +7,9 @@ import { useApp } from '../context/AppContext';
 import Skeleton from '../components/Skeleton';
 import useDebounce from '../hooks/useDebounce';
 
-import { Filter, X, Search } from 'lucide-react';
+import { Filter, X, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+
+const PRODUCTS_PER_PAGE = 30;
 
 const Products = () => {
   const { t } = useApp();
@@ -22,9 +24,11 @@ const Products = () => {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [inStockOnly, setInStockOnly] = useState(searchParams.get('inStock') === 'true');
   const [onSaleOnly, setOnSaleOnly] = useState(searchParams.get('onSale') === 'true');
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     updateParams('name', debouncedSearchQuery);
+    setCurrentPage(1);
   }, [debouncedSearchQuery]);
 
   useEffect(() => {
@@ -76,6 +80,18 @@ const Products = () => {
       newParams.delete(key);
     }
     setSearchParams(newParams);
+    setCurrentPage(1); // Reset page on filter change
+  };
+
+  const totalPages = Math.ceil(productsList.length / PRODUCTS_PER_PAGE);
+  const paginatedProducts = productsList.slice(
+    (currentPage - 1) * PRODUCTS_PER_PAGE,
+    currentPage * PRODUCTS_PER_PAGE
+  );
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   if (loading) return (
@@ -259,7 +275,7 @@ const Products = () => {
           </div>
 
           {(() => {
-            const groups = productsList.reduce((acc, p) => {
+            const groups = paginatedProducts.reduce((acc, p) => {
               const cat = p.category || 'Boshqa';
               if (!acc[cat]) acc[cat] = [];
               acc[cat].push(p);
@@ -296,6 +312,37 @@ const Products = () => {
               </div>
             ));
           })()}
+
+          {/* Pagination UI */}
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button 
+                className="pagination-btn pagination-arrow"
+                disabled={currentPage === 1}
+                onClick={() => handlePageChange(currentPage - 1)}
+              >
+                <ChevronLeft size={18} />
+              </button>
+              
+              {[...Array(totalPages)].map((_, i) => (
+                <button
+                  key={i + 1}
+                  className={`pagination-btn ${currentPage === i + 1 ? 'active' : ''}`}
+                  onClick={() => handlePageChange(i + 1)}
+                >
+                  {i + 1}
+                </button>
+              ))}
+
+              <button 
+                className="pagination-btn pagination-arrow"
+                disabled={currentPage === totalPages}
+                onClick={() => handlePageChange(currentPage + 1)}
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
+          )}
 
           {productsList.length === 0 && (
             <div style={{ textAlign: 'center', padding: '100px 0' }}>
